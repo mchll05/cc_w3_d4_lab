@@ -1,4 +1,5 @@
 require_relative("../db/sql_runner")
+require_relative("./star")
 
 class Movie
 
@@ -13,20 +14,31 @@ class Movie
   end
 
   def save()
-    sql = "INSERT INTO users
+    sql = "INSERT INTO movies
     (title, genre, rating)
     VALUES
     ($1, $2, $3)
     RETURNING id"
     values = [@title, @genre, @rating]
-    user = SqlRunner.run(sql, values)
-    @id = user['id'].to_i
+    movies = SqlRunner.run(sql, values)
+    @id = movies[0]['id'].to_i
   end
 
+  def update()
+    sql = "UPDATE movies
+          SET (title, genre, rating)
+          = ($1, $2, $3,)
+          WHERE id = $1
+        RETURNING id"
+        values = [@title, @genre, @rating]
+        movies = SqlRunner.run(sql,values)
+        @id = movies[0]['id'].to_i
+      end
+
   def self.all()
-    sql = "SELECT * FROM users"
+    sql = "SELECT * FROM movies"
     values = []
-    users = SqlRunner.run(sql, values)
+    movies = SqlRunner.run(sql, values)
     result = movies.map {|movie| Movie.new(movie)}
     return result
   end
@@ -44,7 +56,7 @@ class Movie
           ON castings.star_id = stars.id
           WHERE movie_id = $1"
     values = [@id]
-    locations = SqlRunner.run(sql, values)
+    stars = SqlRunner.run(sql, values)
     result = stars.map {|star| Star.new(star)}
     return result
   end

@@ -3,6 +3,10 @@ require_relative('models/star')
 require_relative('models/casting')
 require('pry-byebug')
 
+Casting.delete_all()
+Star.delete_all()
+Movie.delete_all()
+
 movie1 = Movie.new({ 'title' => 'High Noon', 'genre' => 'western', 'rating' => 10 })
 movie2 = Movie.new({ 'title' => 'Whatever happened to Baby Jane?', 'genre' => 'horror', 'rating' => 8 })
 movie3 = Movie.new({ 'title' => 'Bringing up Baby', 'genre' => 'comedy', 'rating' => 9 })
@@ -26,6 +30,8 @@ casting3 = Casting.new({ 'movie_id' => movie3.id, 'star_id' => star3.id, 'fee' =
 casting1.save()
 casting2.save()
 casting3.save()
+
+
 
 binding.pry
 nil
